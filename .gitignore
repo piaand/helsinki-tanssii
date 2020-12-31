@@ -47,7 +47,7 @@ logs
 
 node_modules
 bower_components
-src/main/resources/static/built
+src/main/resources/static/built/
 
 psd
 thumb
