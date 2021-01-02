@@ -21,7 +21,7 @@ public class RestService {
     }
 
     public String getEventsPlainJSON() {
-        String urlString = "http://open-api.myhelsinki.fi/v1/event/kulke%3A53544";
+        String urlString = "http://open-api.myhelsinki.fi/v1/events/?tags_search=linkedevents%3Akulke%3A350%2Clinkedevents%3Akulke%3A32%2Clinkedevents%3Ayso%3Ap10105%2Clinkedevents%3Ayso%3Ap1278%2Clinkedevents%3Ayso%3Ap16584%2Clinkedevents%3Ayso%3Ap3984%2Clinkedevents%3Ayso%3Ap10216%2Clinkedevents%3Ayso%3Ap10218";
 
         try {
             URI url = new URI(urlString);
