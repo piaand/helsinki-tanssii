@@ -17,10 +17,6 @@ const hasStartDate = (date) => checkValueDefined(date) && checkValueDefined(date
 
 const hasID = (id) => checkValueDefined(id)
 
-const nameMatches = () => {
-
-}
-
 const removeNonValidEvents = (events) => {
 	const validEvents = events.filter(event => 
 		checkNameDefined(event.name) && 
@@ -56,19 +52,37 @@ const removeDoubles = (arrayEvents, event) => {
 	return arrayEvents
 }
 
-const removeEventDoubles = (events) => {
-	const uniqueEvents = events.reduce(removeDoubles, [])
-	return uniqueEvents
+const removeEventDoubles = (events) => events.reduce(removeDoubles, [])
+
+const checkTheNameMatches = (name, target) => {
+	if (checkValueDefined(name) && checkValueDefined(target)) {
+		const res = name === target ? true : false
+		return (res)
+	}
+	return false
 }
 
-
+const addEventData = (events, uniqueEvents) => {
+	const extendedEvents = uniqueEvents.map(event => {
+		const matches = events.filter(data => 
+			checkTheNameMatches(event.name.fi, data.name.fi) ||
+			checkTheNameMatches(event.name.en, data.name.en) ||
+			checkTheNameMatches(event.name.sv, data.name.sv)
+		)
+		const newDates = matches.map(item => item.event_dates)
+		return {...event, event_dates : newDates}
+	})
+	return extendedEvents
+}
 
 const parseEvents = (events) => {
 	console.log("At your service")
 	console.log(events)
 	const validEvents = removeNonValidEvents(events.data)
 	const uniqueEvents = removeEventDoubles(validEvents)
-	//const formattedEvents = modifyEventDates(validEvents)
+	const formattedEvents = addEventData(validEvents, uniqueEvents)
+	console.log("Once more full end result")
+	console.log(formattedEvents)
 	return uniqueEvents
 }
 
