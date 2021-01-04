@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import eventService from './services/events'
 
 const Event = ({event}) => {
     if (event.name.fi !== undefined && event.name.fi !==null) {
@@ -17,13 +18,12 @@ const Event = ({event}) => {
 }
 
 const Intro = ({events}) => {
-    if (events.meta !== undefined && events.meta !== null) {
-        const eventArray = events.data
+    if (events !== undefined && events !== null) {
 
         return (
             <div>
-                <p>In the near future there is {events.meta.count} events happening in Helsinki!</p>
-                {eventArray.map(event => 
+                <p>Here are the events happening in Helsinki!</p>
+                {events.map(event => 
                     <Event key={event.id} event={event}/>
                 )}
             </div>
@@ -40,8 +40,9 @@ const App = () => {
         axios
             .get('/api/v1/events')
             .then(response => {
-                setEvents(response.data)
-                console.log(response.data)
+                const allEvents = eventService.parseEvents(response.data)
+                console.log(allEvents)
+                setEvents(allEvents)
             })
     }
 
