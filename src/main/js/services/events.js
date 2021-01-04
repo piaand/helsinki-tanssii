@@ -13,31 +13,63 @@ const checkEventInFuture = (date) => {
 	return (valid)
 }
 
-const hasStartDate = (date) => checkValueDefined(date.starting_day) && checkEventInFuture(date.starting_day)
+const hasStartDate = (date) => checkValueDefined(date) && checkValueDefined(date.starting_day) && checkEventInFuture(date.starting_day)
 
 const hasID = (id) => checkValueDefined(id)
 
+const nameMatches = () => {
+
+}
+
 const removeNonValidEvents = (events) => {
-	const validEvents = events.filter(
-							event => checkNameDefined(event.name) && 
-							checkNameLocale(event.name) && 
-							hasStartDate(event.event_dates) &&
-							hasID(event.id))
+	const validEvents = events.filter(event => 
+		checkNameDefined(event.name) && 
+		checkNameLocale(event.name) && 
+		hasStartDate(event.event_dates) &&
+		hasID(event.id)
+	)
 	return validEvents
 }
 
-/*
-const removeEventDoubles = (events) => {
-
+const modifyEventField = (event) => {
+	const arrayDates = [event.event_dates]
+	const modifiedEvent = {...event, event_dates : arrayDates}
+	return modifiedEvent
 }
-*/
+
+const nameInList = (nameList, name) => {
+	if (checkValueDefined(name)) {
+		return nameList.includes(name)
+	}
+	return false
+}
+
+const removeDoubles = (arrayEvents, event) => {
+	const namesFi = arrayEvents.map(event => event.name.fi)
+	const namesEn = arrayEvents.map(event => event.name.en)
+	const namesSv = arrayEvents.map(event => event.name.sv)
+
+	if (!(nameInList(namesFi, event.name.fi) || nameInList(namesEn, event.name.en) || nameInList(namesSv, event.name.sv))) {
+		const modifiedEvent = modifyEventField(event)
+		return arrayEvents.concat(modifiedEvent)
+	}
+	return arrayEvents
+}
+
+const removeEventDoubles = (events) => {
+	const uniqueEvents = events.reduce(removeDoubles, [])
+	return uniqueEvents
+}
+
+
 
 const parseEvents = (events) => {
 	console.log("At your service")
 	console.log(events)
 	const validEvents = removeNonValidEvents(events.data)
-	//const uniqueEvents = removeEventDoubles(validEvents)
-	return validEvents
+	const uniqueEvents = removeEventDoubles(validEvents)
+	//const formattedEvents = modifyEventDates(validEvents)
+	return uniqueEvents
 }
 
 export default {parseEvents}
