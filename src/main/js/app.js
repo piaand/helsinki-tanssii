@@ -40,13 +40,9 @@ const App = () => {
     }
 
     const eventIsBetweenDates = (start, end, eventDate) =>  {
-        console.log(start)
-        console.log(eventDate)
-        console.log(end)
         if (eventDate >= start && eventDate < end) {
             return true
         }
-        console.log('returning false')
         return false
     }
  
@@ -64,15 +60,18 @@ const App = () => {
         const tomorrow = new Date(currentDay.getTime())
         tomorrow.setDate(tomorrow.getDate() + 1)
         //const currentDay = new Date("2021-05-20T00:00:00.000Z")
-        console.log(currentDay)
-        if(todayFilter) {
-            const todayEvents = events.filter(event => hasEventOnDay(event, new Date(currentDay)))
-            return todayEvents
-        } else if (tomorrowFilter) {
-            const tomorrowEvents = events.filter(event => hasEventOnDay(event, new Date(tomorrow)))
-            return tomorrowEvents
+        if (events === null || events.length === 0) {
+            return ''
         } else {
-            return events
+            if(todayFilter) {
+                const todayEvents = events.filter(event => hasEventOnDay(event, new Date(currentDay)))
+                return todayEvents
+            } else if (tomorrowFilter) {
+                const tomorrowEvents = events.filter(event => hasEventOnDay(event, new Date(tomorrow)))
+                return tomorrowEvents
+            } else {
+                return events
+            }
         }
     }
 

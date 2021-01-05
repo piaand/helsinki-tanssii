@@ -13,19 +13,20 @@ const Event = ({event}) => {
 }
 
 const EventList = ({events}) => {
-    if (events !== undefined && events !== null) {
-
-        return (
+	if (events === '') {
+		return (<p>Fetching events...</p>)
+	} else if (events.length === 0) {
+		return (<p>No events - try with loser seach restrcitions</p>)
+	} else {
+		return (
             <div>
                 <p>Here are the events happening in Helsinki!</p>
                 {events.map(event => 
                     <Event key={event.id} event={event}/>
                 )}
             </div>
-        ) 
-    }
-    return (<p>Fetching events...</p>)
-
+        )
+	}
 }
 
 export default EventList
