@@ -4,28 +4,14 @@ import axios from 'axios'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import EventList from './components/Eventlist'
+import SearchPanel from './components/SearchPanel'
 import eventService from './services/events'
 
-
-const Button = ( { effect, todayFilter} ) => {
-    return (
-        <button onClick={effect}>{todayFilter ? 'Remove filter' : 'Show today'}</button>
-    )
-}
-
-const SearchPanel = ( {filter, valueToday} ) => {
-    return (
-        <div>
-            <p>Filter the events below</p>
-            <Button effect={filter} todayFilter={valueToday}/>
-            
-        </div>
-    )
-}
 
 const App = () => {
     const [events, setEvents] = useState([])
     const [todayFilter, setTodayFilter] = useState(false)
+    const [tomorrowFilter, setTomorrowFilter] = useState(false)
     
     const hook = () => {
         axios
@@ -38,7 +24,19 @@ const App = () => {
     }
 
     const handleTodayButtonEvent = () => {
-        setTodayFilter(!todayFilter)
+        const configTodayFilter = !todayFilter
+        if (configTodayFilter && tomorrowFilter) {
+            setTomorrowFilter(!tomorrowFilter)
+        }
+        setTodayFilter(configTodayFilter)
+    }
+
+    const handleTomorrowButtonEvent = () => {
+        const configTomorrowFilter = !tomorrowFilter
+        if (configTomorrowFilter && todayFilter) {
+            setTodayFilter(!todayFilter)
+        }
+        setTomorrowFilter(configTomorrowFilter)
     }
 
     const eventIsBetweenDates = (start, end, eventDate) =>  {
@@ -63,13 +61,16 @@ const App = () => {
     
     const eventsToShow = () => {
         const currentDay = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate())
+        const tomorrow = new Date(currentDay.getTime())
+        tomorrow.setDate(tomorrow.getDate() + 1)
         //const currentDay = new Date("2021-05-20T00:00:00.000Z")
         console.log(currentDay)
         if(todayFilter) {
             const todayEvents = events.filter(event => hasEventOnDay(event, new Date(currentDay)))
-            console.log("events to show")
-            console.log(todayEvents)
             return todayEvents
+        } else if (tomorrowFilter) {
+            const tomorrowEvents = events.filter(event => hasEventOnDay(event, new Date(tomorrow)))
+            return tomorrowEvents
         } else {
             return events
         }
@@ -81,13 +82,12 @@ const App = () => {
         <div>
             <Header />
             <h1>Helsinki Tanssii</h1>
-            <SearchPanel filter={handleTodayButtonEvent} valueToday={todayFilter}/>
+            <SearchPanel filterToday={handleTodayButtonEvent} filterTomorrow={handleTomorrowButtonEvent} valueToday={todayFilter} valueTomorrow={tomorrowFilter}/>
             <EventList events={eventsToShow()} />
             <Footer />        
         </div>
     )
 }
-
 
 ReactDOM.render(
 	<App />,
