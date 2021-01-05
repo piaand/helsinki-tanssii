@@ -3,38 +3,29 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import EventList from './components/Eventlist'
 import eventService from './services/events'
 
-const Event = ({event}) => {
-    if (event.name.fi !== undefined && event.name.fi !==null) {
-        return (<p>{event.name.fi} : {event.event_dates[0].starting_day} : {event.event_dates[0].ending_day}</p>)
-    } else if (event.name.en !== undefined && event.name.en !==null) {
-        return (<p>{event.name.en}</p>)
-    } else if (event.name.sv !== undefined && event.name.sv !==null) {
-        return (<p>{event.name.sv}</p>)
-    }
-    return (<p>This event had no title</p>)
-    
+
+const Button = ( { effect, todayFilter} ) => {
+    return (
+        <button onClick={effect}>{todayFilter ? 'Remove filter' : 'Show today'}</button>
+    )
 }
 
-const Intro = ({events}) => {
-    if (events !== undefined && events !== null) {
-
-        return (
-            <div>
-                <p>Here are the events happening in Helsinki!</p>
-                {events.map(event => 
-                    <Event key={event.id} event={event}/>
-                )}
-            </div>
-        ) 
-    }
-    return (<p>Fetching events...</p>)
-
+const SearchPanel = ( {filter, valueToday} ) => {
+    return (
+        <div>
+            <p>Filter the events below</p>
+            <Button effect={filter} todayFilter={valueToday}/>
+            
+        </div>
+    )
 }
 
 const App = () => {
     const [events, setEvents] = useState([])
+    const [todayFilter, setTodayFilter] = useState(false)
     
     const hook = () => {
         axios
@@ -46,19 +37,52 @@ const App = () => {
             })
     }
 
-    useEffect(hook, [])
-    const data = events.data
-    if (data !== undefined && data !== null) {
-        console.log("Data found")
-        if (data[0].name.fi !== undefined && data[0].name.fi !== null)
-            console.log(data[0].name.fi)
+    const handleTodayButtonEvent = () => {
+        setTodayFilter(!todayFilter)
+    }
+
+    const eventIsBetweenDates = (start, end, eventDate) =>  {
+        console.log(start)
+        console.log(eventDate)
+        console.log(end)
+        if (eventDate >= start && eventDate < end) {
+            return true
+        }
+        console.log('returning false')
+        return false
+    }
+ 
+    const hasEventOnDay = (event, day) => {
+        const bufferDay = new Date(day.getTime())
+        bufferDay.setDate(bufferDay.getDate() + 1)
+        const stringDates  = eventService.getEventStartDates(event)
+        const fitEvents = stringDates.filter(eventDay => eventIsBetweenDates(new Date(day), new Date(bufferDay), new Date(eventDay)))
+        const result = fitEvents.length === 0 ? false : true
+        return result
     }
     
+    const eventsToShow = () => {
+        const currentDay = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate())
+        //const currentDay = new Date("2021-05-20T00:00:00.000Z")
+        console.log(currentDay)
+        if(todayFilter) {
+            const todayEvents = events.filter(event => hasEventOnDay(event, new Date(currentDay)))
+            console.log("events to show")
+            console.log(todayEvents)
+            return todayEvents
+        } else {
+            return events
+        }
+    }
+
+    useEffect(hook, [])
+    const data = events.data
     return (
         <div>
             <Header />
             <h1>Helsinki Tanssii</h1>
-            <Intro events={events} />
+            <SearchPanel filter={handleTodayButtonEvent} valueToday={todayFilter}/>
+            <EventList events={eventsToShow()} />
             <Footer />        
         </div>
     )

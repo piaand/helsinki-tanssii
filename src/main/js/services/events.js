@@ -75,6 +75,11 @@ const addEventData = (events, uniqueEvents) => {
 	return extendedEvents
 }
 
+const getEventStartDates = (event) => {
+	const dates = event.event_dates.map(date => date.starting_day)
+	return dates
+} 
+
 const parseEvents = (events) => {
 	console.log("At your service")
 	console.log(events)
@@ -83,7 +88,7 @@ const parseEvents = (events) => {
 	const formattedEvents = addEventData(validEvents, uniqueEvents)
 	console.log("Once more full end result")
 	console.log(formattedEvents)
-	return uniqueEvents
+	return formattedEvents
 }
 
-export default {parseEvents}
+export default {parseEvents, getEventStartDates}
