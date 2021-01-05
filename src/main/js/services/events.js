@@ -78,7 +78,23 @@ const addEventData = (events, uniqueEvents) => {
 const getEventStartDates = (event) => {
 	const dates = event.event_dates.map(date => date.starting_day)
 	return dates
-} 
+}
+
+const checkWordExistsAndMatches = (word, target) => {
+	const targetLowerCase = target.toLowerCase()
+	if (checkValueDefined(word) && word.toLowerCase().includes(targetLowerCase)) {
+		return true
+	} else {
+		return false
+	}
+}
+
+const nameMatchesTarget = (name, target) => {
+	if (checkWordExistsAndMatches(name.fi, target) || checkWordExistsAndMatches(name.en, target) || checkWordExistsAndMatches(name.sv, target)) {
+		return true
+	}
+	return false
+}
 
 const parseEvents = (events) => {
 	console.log("At your service")
@@ -91,4 +107,4 @@ const parseEvents = (events) => {
 	return formattedEvents
 }
 
-export default {parseEvents, getEventStartDates}
+export default {parseEvents, getEventStartDates, nameMatchesTarget}

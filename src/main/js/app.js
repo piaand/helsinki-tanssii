@@ -10,6 +10,7 @@ import eventService from './services/events'
 
 const App = () => {
     const [events, setEvents] = useState([])
+    const [eventFilter, setEventFilter] = useState('')
     const [todayFilter, setTodayFilter] = useState(false)
     const [tomorrowFilter, setTomorrowFilter] = useState(false)
     
@@ -21,6 +22,10 @@ const App = () => {
                 console.log(allEvents)
                 setEvents(allEvents)
             })
+    }
+
+    const handleEventFilter = (event) => {
+        setEventFilter(event.target.value)
     }
 
     const handleTodayButtonEvent = () => {
@@ -55,7 +60,7 @@ const App = () => {
         return result
     }
     
-    const eventsToShow = () => {
+    const filterByPopularDates = () => {
         const currentDay = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate())
         const tomorrow = new Date(currentDay.getTime())
         tomorrow.setDate(tomorrow.getDate() + 1)
@@ -75,13 +80,27 @@ const App = () => {
         }
     }
 
+    const filterBySearch = (events) => {
+        const matchByName = events.filter(event => eventService.nameMatchesTarget(event.name, eventFilter))
+        return matchByName
+    }
+
+    const eventsToShow = () => {
+        const filteredByDay = filterByPopularDates()
+        if (eventFilter.trim().length !== 0 && filteredByDay !== '' && filteredByDay.length !== 0) {
+            const filteredBySearch = filterBySearch(filteredByDay)
+            return filteredBySearch
+        }
+        return filteredByDay
+    }
+
     useEffect(hook, [])
     const data = events.data
     return (
         <div>
             <Header />
             <h1>Helsinki Tanssii</h1>
-            <SearchPanel filterToday={handleTodayButtonEvent} filterTomorrow={handleTomorrowButtonEvent} valueToday={todayFilter} valueTomorrow={tomorrowFilter}/>
+            <SearchPanel handleEventFilter={handleEventFilter} eventFilter={eventFilter} filterToday={handleTodayButtonEvent} filterTomorrow={handleTomorrowButtonEvent} valueToday={todayFilter} valueTomorrow={tomorrowFilter}/>
             <EventList events={eventsToShow()} />
             <Footer />        
         </div>

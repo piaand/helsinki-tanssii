@@ -17,10 +17,22 @@ const ButtonSwitch = ( { effect, effect_tmrw, todayFilter, tomorrowFilter} ) => 
     )
 }
 
-const SearchPanel = ( {filterToday, valueToday, filterTomorrow, valueTomorrow} ) => {
+const DescriptionFinder = ({ eventFilter, handleEventFilter }) => {
+
+	return (
+		<div>
+			<form> Search by event name: 
+				<input onChange={handleEventFilter} value={eventFilter}></input>
+			</form>
+		</div>
+	)
+}
+
+const SearchPanel = ( {eventFilter, handleEventFilter, filterToday, valueToday, filterTomorrow, valueTomorrow} ) => {
     return (
         <div>
-            <p>Filter the events below</p>
+			<p>Filter the events below</p>
+			<DescriptionFinder eventFilter={eventFilter} handleEventFilter={handleEventFilter}/>
             <ButtonSwitch effect={filterToday} effect_tmrw={filterTomorrow} todayFilter={valueToday} tomorrowFilter={valueTomorrow}/>
             
         </div>
