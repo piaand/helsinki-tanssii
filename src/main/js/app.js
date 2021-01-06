@@ -8,6 +8,7 @@ import SearchPanel from './components/SearchPanel'
 import eventService from './services/events'
 
 
+
 const App = () => {
     const [events, setEvents] = useState([])
     const [eventFilter, setEventFilter] = useState('')
@@ -113,13 +114,12 @@ const App = () => {
 
     useEffect(hook, [])
     return (
-        <div>
+        <>
             <Header />
-            <h1>Helsinki Tanssii</h1>
             <SearchPanel handleEventFilter={handleEventFilter} eventFilter={eventFilter} filterToday={handleTodayButtonEvent} filterTomorrow={handleTomorrowButtonEvent} valueToday={todayFilter} valueTomorrow={tomorrowFilter}/>
             <EventList events={eventsToShow()} />
             <Footer />        
-        </div>
+        </>
     )
 }
 
@@ -127,3 +127,7 @@ ReactDOM.render(
 	<App />,
 	document.getElementById('react')
 )
+
+//<img style="display: none" src={require('../resources/public/images/curled_hog.jpg')} alt="Background picture - ambient lights"></img>
+//https://unsplash.com/photos/tvz6htukUfk
+       

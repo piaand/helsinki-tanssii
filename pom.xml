@@ -100,6 +100,18 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>npm install --save react-bootstrap</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>npm install --save bootstrap</id>
+						<goals>
+							<goal>npm</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>npm run build</id>
 						<goals>
 							<goal>npm</goal>

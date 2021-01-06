@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Open+Sans&display=swap');
+
+body {
+	color:black;
+	font-family: 'Lato', sans-serif;
+	background-color: rgb(233,230,234);
+}
+
+.btn-secondary{
+	padding: 5px
+}
+
+.filterButtons {
+	margin: 0 auto;
+	font-size: 5em;
+}
+
+.header {
+	background-image: url("/images/background.jpg");
+	padding: 50px 0 50px 0;
+	height: 600px;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+  }
+
+h1 {
+	color: #fff;
+	text-shadow: 0px 4px 3px rgba(0,0,0,0.4),
+				0px 8px 13px rgba(0,0,0,0.1),
+				0px 18px 23px rgba(0,0,0,0.1);
+}
+
+.mainTitle {
+	margin: 0 auto;
+	font-size: 5em;
+	text-align: center;
+}
+
+.subTitle {
+	margin: 0 auto;
+	font-size: 1.5em;
+	text-align: center;
+}
+
+.searchPanel {
+	text-align: center;
+}
+
+.searchBar {
+	margin: 0 auto;
+	text-align: center;
+	padding: 5px
+}
