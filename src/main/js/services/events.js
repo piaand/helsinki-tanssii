@@ -96,15 +96,22 @@ const nameMatchesTarget = (name, target) => {
 	return false
 }
 
+const addProcessingDate = (events) => {
+	const processDate = new Date()
+	const datedObject = {date:  processDate, eventsArray: events}
+	return datedObject
+}
+
 const parseEvents = (events) => {
 	console.log("At your service")
 	console.log(events)
 	const validEvents = removeNonValidEvents(events.data)
 	const uniqueEvents = removeEventDoubles(validEvents)
 	const formattedEvents = addEventData(validEvents, uniqueEvents)
+	const final = addProcessingDate(formattedEvents)
 	console.log("Once more full end result")
-	console.log(formattedEvents)
-	return formattedEvents
+	console.log(final)
+	return final
 }
 
 export default {parseEvents, getEventStartDates, nameMatchesTarget}

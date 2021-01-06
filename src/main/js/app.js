@@ -16,20 +16,17 @@ const App = () => {
     
     const hook = () => {
         const localData = localStorage.getItem('localEvents')
-        if (localData && hasNotExpired(localData)) {
-            console.log("Using local data!")
-            console.log(JSON.parse(localData))
+        if (localData && !(hasExpired(localData))) {
             setEvents(JSON.parse(localData))
-        } else {
-            axios
-                .get('/api/v1/events')
-                .then(response => {
-                    const allEvents = eventService.parseEvents(response.data)
-                    console.log(allEvents)
-                    localStorage.setItem('localEvents', JSON.stringify(allEvents))
-                    setEvents(allEvents)
-                })
         }
+        axios
+            .get('/api/v1/events')
+            .then(response => {
+                const allEvents = eventService.parseEvents(response.data)
+                console.log(allEvents)
+                localStorage.setItem('localEvents', JSON.stringify(allEvents))
+                setEvents(allEvents)
+            })
     }
 
     const handleEventFilter = (event) => {
@@ -52,9 +49,16 @@ const App = () => {
         setTomorrowFilter(configTomorrowFilter)
     }
 
-    const hasNotExpired = (data) => {
-        //check metadata and date when last called api
-        return true
+    const hoursToMillis = (hours) => {
+        return (hours * 60 * 60 * 1000)
+    }
+
+    const hasExpired = (data) => {
+        const expirationInMilliseconds = hoursToMillis(6);
+        const currentDay = new Date()
+        const processDate = new Date(JSON.parse(data).date)
+        const diffTime = Math.abs(currentDay - processDate);
+        return diffTime > expirationInMilliseconds ? true : false
     }
 
     const eventIsBetweenDates = (start, end, eventDate) =>  {
@@ -69,26 +73,26 @@ const App = () => {
         bufferDay.setDate(bufferDay.getDate() + 1)
         const stringDates  = eventService.getEventStartDates(event)
         const fitEvents = stringDates.filter(eventDay => eventIsBetweenDates(new Date(day), new Date(bufferDay), new Date(eventDay)))
-        const result = fitEvents.length === 0 ? false : true
-        return result
+        return fitEvents.length === 0 ? false : true
     }
     
     const filterByPopularDates = () => {
         const currentDay = new Date(new Date().getFullYear(),new Date().getMonth() , new Date().getDate())
         const tomorrow = new Date(currentDay.getTime())
         tomorrow.setDate(tomorrow.getDate() + 1)
+        const allEvents = (events !== undefined && events !== null) ? events.eventsArray : null
         //const currentDay = new Date("2021-05-20T00:00:00.000Z")
-        if (events === null || events.length === 0) {
+        if (allEvents === undefined || allEvents === null || allEvents.length === 0) {
             return ''
         } else {
             if(todayFilter) {
-                const todayEvents = events.filter(event => hasEventOnDay(event, new Date(currentDay)))
+                const todayEvents = allEvents.filter(event => hasEventOnDay(event, new Date(currentDay)))
                 return todayEvents
             } else if (tomorrowFilter) {
-                const tomorrowEvents = events.filter(event => hasEventOnDay(event, new Date(tomorrow)))
+                const tomorrowEvents = allEvents.filter(event => hasEventOnDay(event, new Date(tomorrow)))
                 return tomorrowEvents
             } else {
-                return events
+                return allEvents
             }
         }
     }
@@ -108,7 +112,6 @@ const App = () => {
     }
 
     useEffect(hook, [])
-    const data = events.data
     return (
         <div>
             <Header />
