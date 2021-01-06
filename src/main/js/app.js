@@ -15,13 +15,21 @@ const App = () => {
     const [tomorrowFilter, setTomorrowFilter] = useState(false)
     
     const hook = () => {
-        axios
-            .get('/api/v1/events')
-            .then(response => {
-                const allEvents = eventService.parseEvents(response.data)
-                console.log(allEvents)
-                setEvents(allEvents)
-            })
+        const localData = localStorage.getItem('localEvents')
+        if (localData && hasNotExpired(localData)) {
+            console.log("Using local data!")
+            console.log(JSON.parse(localData))
+            setEvents(JSON.parse(localData))
+        } else {
+            axios
+                .get('/api/v1/events')
+                .then(response => {
+                    const allEvents = eventService.parseEvents(response.data)
+                    console.log(allEvents)
+                    localStorage.setItem('localEvents', JSON.stringify(allEvents))
+                    setEvents(allEvents)
+                })
+        }
     }
 
     const handleEventFilter = (event) => {
@@ -42,6 +50,11 @@ const App = () => {
             setTodayFilter(!todayFilter)
         }
         setTomorrowFilter(configTomorrowFilter)
+    }
+
+    const hasNotExpired = (data) => {
+        //check metadata and date when last called api
+        return true
     }
 
     const eventIsBetweenDates = (start, end, eventDate) =>  {
