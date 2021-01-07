@@ -15,6 +15,12 @@ body {
 	font-size: 5em;
 }
 
+.event-card h1 {
+	color: black;
+	font-size: 1em;
+	text-shadow: none;
+}
+
 .header {
 	background-image: url("/images/background.jpg");
 	padding: 50px 0 50px 0;
@@ -35,6 +41,13 @@ h1 {
 	margin: 0 auto;
 	font-size: 5em;
 	text-align: center;
+}
+
+.resultRow {
+	margin: 0 auto;
+	text-align: center;
+	font-size: 1em;
+	padding-bottom: 2em;
 }
 
 .subTitle {
