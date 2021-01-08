@@ -129,6 +129,4 @@ ReactDOM.render(
 	document.getElementById('react')
 )
 
-//<img style="display: none" src={require('../resources/public/images/curled_hog.jpg')} alt="Background picture - ambient lights"></img>
-//https://unsplash.com/photos/tvz6htukUfk
        
