@@ -1,4 +1,4 @@
-# Screenshots about the Helsinki Tanssii service
+# Screenshots from the Helsinki Tanssii service
 
 Here are some pictures I took from the [live service](https://radiant-fortress-33636.herokuapp.com/)
 
