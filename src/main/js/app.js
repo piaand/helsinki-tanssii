@@ -7,6 +7,7 @@ import Footer from './components/Footer'
 import EventList from './components/Eventlist'
 import SearchPanel from './components/SearchPanel'
 import eventService from './services/events'
+import { all } from 'when'
 
 
 
@@ -27,7 +28,7 @@ const App = () => {
                 const allEvents = eventService.parseEvents(response.data)
                 console.log(allEvents)
                 localStorage.setItem('localEvents', JSON.stringify(allEvents))
-                setEvents(allEvents)
+                setEvents(allEvents) 
             })
     }
 

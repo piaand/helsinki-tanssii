@@ -3,6 +3,8 @@ package com.alexand.helsinkitanssii;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLOutput;
+
 @RestController
 public class EventController {
 
@@ -14,8 +16,13 @@ public class EventController {
 
     @GetMapping("/api/v1/events")
     public String getEvents() {
-        String result = restService.getEventsPlainJSON();
-        System.out.printf(result);
-        return result;
+        try {
+            String result = restService.getEventsPlainJSON();
+            return result;
+        } catch (Exception e) {
+            System.out.println("Error: "+ e);
+            return null;
+        }
+
     }
 }

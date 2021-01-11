@@ -64,4 +64,3 @@ const EventList = ({events}) => {
 }
 
 export default EventList
-//<span>Photo by <a href="https://unsplash.com/@soymeraki?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Javier Allegue Barros</a> on <a href="https://unsplash.com/s/photos/evening?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></span>

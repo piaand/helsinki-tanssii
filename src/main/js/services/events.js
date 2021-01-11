@@ -102,16 +102,22 @@ const addProcessingDate = (events) => {
 	return datedObject
 }
 
+const createEmptyEvents = () => ({date: new Date(), eventsArray: []})
+
 const parseEvents = (events) => {
 	console.log("At your service")
-	console.log(events)
-	const validEvents = removeNonValidEvents(events.data)
-	const uniqueEvents = removeEventDoubles(validEvents)
-	const formattedEvents = addEventData(validEvents, uniqueEvents)
-	const final = addProcessingDate(formattedEvents)
-	console.log("Once more full end result")
-	console.log(final)
-	return final
+	if (events !== undefined && events !== null && events !== "") {
+		const validEvents = removeNonValidEvents(events.data)
+		const uniqueEvents = removeEventDoubles(validEvents)
+		const formattedEvents = addEventData(validEvents, uniqueEvents)
+		const final = addProcessingDate(formattedEvents)
+		console.log(final)
+		return final
+	} else {
+		console.log("No events found via API")
+		const emptyEvents = createEmptyEvents()
+		return emptyEvents
+	}
 }
 
 export default {parseEvents, getEventStartDates, nameMatchesTarget}

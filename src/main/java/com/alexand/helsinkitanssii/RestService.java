@@ -20,26 +20,27 @@ public class RestService {
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public String getEventsPlainJSON() {
+    public String getEventsPlainJSON() throws Exception{
         String urlString = "http://open-api.myhelsinki.fi/v1/events/?tags_search=linkedevents%3Akulke%3A350%2Clinkedevents%3Akulke%3A32%2Clinkedevents%3Ayso%3Ap10105%2Clinkedevents%3Ayso%3Ap1278%2Clinkedevents%3Ayso%3Ap16584%2Clinkedevents%3Ayso%3Ap3984%2Clinkedevents%3Ayso%3Ap10216%2Clinkedevents%3Ayso%3Ap10218";
 
         try {
             URI url = new URI(urlString);
             ResponseEntity<String> response = this.restTemplate.getForEntity(url,String.class);
             if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println(response.getBody());
                 return response.getBody();
             }
-            return "Not status ok";
+            throw new Exception("HTTP statuscode not 200");
         } catch (URISyntaxException e) {
-            return "URL is not valid";
+            System.out.println("URL is not valid - URSyntax Exception :" +e.getMessage());
+            throw new Exception("URL is not valid");
         } catch (Exception e) {
             if(e instanceof HttpStatusCodeException){
                 String responseText=((HttpStatusCodeException)e).getResponseBodyAsString();
-                //now you have the response, construct json from it, and extract the errors
                 System.out.println("Exception :" +responseText);
+                return responseText;
+            } else {
+                throw new Exception("URL is not valid");
             }
-            return "Caught an exception " + e.getMessage();
         }
     }
 }
