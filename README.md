@@ -1,7 +1,7 @@
 # Helsinki tanssii
 My current work in progress. Small React + Spring project to better visualize [My Helsinki](https://www.myhelsinki.fi/fi/search) dance event data.
 
-You may check the project live [here](https://radiant-fortress-33636.herokuapp.com/) at Heroku. It may take a while before the site is up - see the screenshots [here](./documentation/screenshots.md) if you are too eager to wait.
+[Project is currently at maintenance and not live](https://radiant-fortress-33636.herokuapp.com/) at Heroku. See the screenshots [here](./documentation/screenshots.md).
 
 ![Helsinki tanssii banner by Akshar Dave on Unsplash](./documentation/HelsinkiTanssii-banner.png)
 
